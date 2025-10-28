@@ -1,0 +1,34 @@
+import React from "react";
+import ImageComponent from "./image.component";
+import { Token } from "@/utils/types";
+
+const AssetComponent = ({
+    token,
+    onClick,
+}: {
+    token: Token;
+    onClick: (token: Token) => void;
+}) => {
+    return (
+        <div
+            className="font-light text-neutral flex flex-row items-center text-sm cursor-pointer"
+            onClick={() => onClick(token)}
+        >
+            <ImageComponent
+                className="flex-shrink-0 h-10 w-10 rounded-full"
+                src={token.logoUrl}
+                alt={token.name}
+            />
+            <div className="flex flex-col">
+                <p className="text-white text-sm px-2 ">{token.name}</p>
+                {token.symbol && (
+                    <p className="text-neutral-400 text-xs px-2 text-left">
+                        {token.symbol}
+                    </p>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default AssetComponent;

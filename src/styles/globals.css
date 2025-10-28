@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus-visible,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: #f1f1f1;
+    -webkit-box-shadow: 0 0 0px 1000px rgb(7, 6, 20) inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+@layer base {
+    ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+    }
+
+    * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    body {
+        @apply bg-primary text-neutral;
+    }
+
+    .button {
+        @apply relative inline-flex items-center justify-center px-4 py-4 w-full border border-transparent text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 text-primary bg-white;
+    }
+
+    .spinner {
+        @apply h-5 w-5 border-[3px] border-y-primary animate-spin rounded-full border-x-primary/30;
+    }
+
+    nav{
+        @apply z-30;
+    }
+}
+
+.Toastify__toast--info {
+    background-color: #3498db !important;
+}
+
+/* Success toast - already green by default, but you can customize if needed */
+.Toastify__toast--success {
+    background-color: #52bd94 !important;
+}
+
+/* Warning toast */
+.Toastify__toast--warning {
+    background-color: #f1c40f !important;
+}
+
+/* Error toast */
+.Toastify__toast--error {
+    background-color: #a64b41 !important;
+}
+
+.react-datepicker-wrapper {
+    @apply w-full !important;
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+table{
+    min-width: 1000px !important;
+}

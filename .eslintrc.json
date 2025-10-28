@@ -1,0 +1,16 @@
+{
+    "extends": ["@adonisjs/eslint-config/package"],
+    "plugins": ["@adonisjs/eslint-plugin"],
+    "rules": {
+        "unicorn/prefer-module": "off",
+        "unicorn/filename-case": [
+            "error",
+            {
+                "cases": {
+                    "kebabCase": true,
+                    "snakeCase": true
+                }
+            }
+        ]
+    }
+}
