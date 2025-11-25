@@ -19,8 +19,6 @@ export const AssetInfoModalContainer = () => {
     const [args, setArgs] = React.useState<AssetInfoProps>({
         token: null,
     });
-
-    console.log("tokeeeeen",args.token)
     return {
         Component: () => (
             <AssetInfo token={args.token} refresh={args.refresh} />

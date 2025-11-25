@@ -11,7 +11,7 @@ import { routes } from "@/utils/routes";
 interface TransactionInfoProps {
     isModalOpen: boolean;
     closeModal: () => void;
-    transaction: any
+    transaction: any;
 }
 
 const TransactionInfo: React.FC<TransactionInfoProps> = ({
