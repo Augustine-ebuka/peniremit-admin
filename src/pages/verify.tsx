@@ -48,9 +48,14 @@ const Verify = () => {
         const domainParts = (domain && domain.split(".")) || [""];
 
         const shortenedUsername =
-            username.length > 3 ? `${username.slice(0, 3)}***` : `${username[0] || ""}***`;
+            username.length > 3
+                ? `${username.slice(0, 3)}***`
+                : `${username[0] || ""}***`;
 
-        const shortenedDomain = domainParts.length > 1 ? `${(domainParts[0][0] || "")}***.${domainParts[1]}` : domain;
+        const shortenedDomain =
+            domainParts.length > 1
+                ? `${domainParts[0][0] || ""}***.${domainParts[1]}`
+                : domain;
 
         return `${shortenedUsername}@${shortenedDomain}`;
     };
@@ -84,7 +89,7 @@ const Verify = () => {
             })
             .catch((error) => {
                 console.log(error);
-                const msg = error?.response?.data
+                const msg = error?.response?.data;
                 const msg2 = error?.response?.data?.errors?.[0]?.message;
                 const msg3 = error?.response?.data?.message;
                 setErrorMessage(msg || msg2 || msg3 || "An error occurred");
@@ -93,8 +98,6 @@ const Verify = () => {
                 setIsLoading(false);
             });
     };
-
-
 
     const handleResend = () => {
         if (!canResend) return;

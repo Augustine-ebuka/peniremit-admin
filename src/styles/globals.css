@@ -41,7 +41,7 @@ select:-webkit-autofill:focus {
         @apply h-5 w-5 border-[3px] border-y-primary animate-spin rounded-full border-x-primary/30;
     }
 
-    nav{
+    nav {
         @apply z-30;
     }
 }
@@ -75,6 +75,6 @@ select:-webkit-autofill:focus {
     }
 }
 
-table{
+table {
     min-width: 1000px !important;
 }

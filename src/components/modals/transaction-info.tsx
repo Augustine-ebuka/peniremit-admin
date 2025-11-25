@@ -95,14 +95,11 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
                             value={
                                 <div>
                                     <div>
-                                        {""} (
-                                        {""})
+                                        {""} ({""})
                                     </div>
                                     <div className="text-sm">
                                         <ShortenerComponent
-                                            value={
-                                                transaction.from_address
-                                            }
+                                            value={transaction.from_address}
                                         />
                                     </div>
                                 </div>

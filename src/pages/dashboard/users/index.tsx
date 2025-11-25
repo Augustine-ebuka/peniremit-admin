@@ -421,7 +421,8 @@ const UserRow = ({ user, reload }: { user: User; reload: () => void }) => {
                 </div>
             </td>
             <td className="py-4 px-4 w-[250px]">
-                {formatDate(user.createdAt)}, {formatTime(user.createdAt)}
+                {formatDate(user.createdAt as string)}{" "}
+                {formatTime(user.createdAt as string)}
             </td>
             <td className="py-4 px-4  w-[280px]">
                 {user.role?.toUpperCase() || "-"}

@@ -18,7 +18,7 @@ const Dashboard = () => {
 
     const handleUserData = async () => {
         axios
-            .get(BASE_URL +`/users/${user?.id}`, {
+            .get(BASE_URL + `/users/${user?.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data", // Important for file uploads

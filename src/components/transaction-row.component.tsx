@@ -19,16 +19,23 @@ const TransactionRow = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { fetchTokenByAddress, loading: fetchingToken } = useFetchToken();
     const fee = Number(transaction.fee).toFixed(5);
-    const calculateFeeUsd = Number(transaction.fee) * Number(transaction.meta_data.amount_in_usd || 1);
+    const calculateFeeUsd =
+        Number(transaction.fee) *
+        Number(transaction.meta_data.amount_in_usd || 1);
     const feeUsd = Number(calculateFeeUsd).toFixed(2);
     const amount = Number(transaction.amount_usd).toFixed(5);
-    const calculateAmountUsd = Number(transaction.amount_usd) * Number(transaction.meta_data.amount_in_usd || 1);
+    const calculateAmountUsd =
+        Number(transaction.amount_usd) *
+        Number(transaction.meta_data.amount_in_usd || 1);
     const amountUsd = Number(calculateAmountUsd).toFixed(2);
     const symbol = "";
     const { assetInfo } = useModalContext();
 
     const isSwap = useMemo(() => {
-        return transaction.transaction_type === "swap" || !!transaction.meta_data?.token_out;
+        return (
+            transaction.transaction_type === "swap" ||
+            !!transaction.meta_data?.token_out
+        );
     }, [transaction]);
 
     const handleAssetClick = async (tokenAddress: string) => {
@@ -65,7 +72,7 @@ const TransactionRow = ({
                         onClick={() =>
                             handleAssetClick(
                                 transaction.meta_data?.token_in ||
-                                    transaction.token
+                                    transaction.token,
                             )
                         }
                         className="cursor-pointer hover:opacity-80 transition-opacity"
@@ -88,7 +95,7 @@ const TransactionRow = ({
                             <div
                                 onClick={() =>
                                     handleAssetClick(
-                                        transaction.meta_data?.token_out
+                                        transaction.meta_data?.token_out,
                                     )
                                 }
                                 className="cursor-pointer hover:opacity-80 transition-opacity"
