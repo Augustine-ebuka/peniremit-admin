@@ -19,7 +19,7 @@ const Login = () => {
         setErrorMessage("");
 
         axios
-            .post(BASE_URL + "/api/auth/request-otp", {
+            .post(BASE_URL + "/auth", {
                 email,
             })
             .then(() => {

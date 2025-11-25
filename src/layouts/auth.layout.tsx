@@ -20,7 +20,7 @@ const AuthLayout = ({ children }: any) => {
 
     const handleUserData = async () => {
         axios
-            .get(BASE_URL + "/api/auth/user", {
+            .get(BASE_URL + `/users/${user?.id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {

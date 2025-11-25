@@ -136,7 +136,7 @@ const Token = () => {
 
     const loadAssets = (type: TabType = "active") => {
         axios
-            .get(BASE_URL + "/api/assets", {
+            .get(BASE_URL + "/tokens", {
                 headers: { Authorization: `Bearer ${token}` },
                 params: {
                     duration_start: duration.start.toISOString(),
@@ -149,15 +149,63 @@ const Token = () => {
                 },
             })
             .then((res) => {
+                // API returns { data: { tokens: [...], pagination: { page, page_size, total_pages } } }
+                const payload = res.data?.data ?? res.data;
+                const tokensFromApi = payload.tokens || [];
+                // normalize tokens to the app Token shape
+                const normalizedTokens: TokenType[] = tokensFromApi.map((t: any) => ({
+                    createdAt: t.created_at,
+                    updatedAt: t.updated_at,
+                    address: t.address,
+                    name: t.name,
+                    symbol: t.symbol,
+                    decimals: t.decimals,
+                    logoUrl: t.metadata?.logo_url || "",
+                    isDefault: t.metadata?.is_default ?? false,
+                    isNative: false,
+                    chainId: t.chain_id,
+                    metadata: {
+                        id: t.metadata?.id || "",
+                        createdAt: t.metadata?.created_at || "",
+                        updatedAt: t.metadata?.updated_at || "",
+                        projectEmail: t.metadata?.project_email || null,
+                        website: t.metadata?.website || "",
+                        category: t.metadata?.category || null,
+                        description: t.metadata?.description || null,
+                        creatorAddress: t.metadata?.creator_address || null,
+                        communityLinks: t.metadata?.community_links || [],
+                        listed: t.metadata?.listed ?? false,
+                        tokenId: t.metadata?.token_id || t.metadata?.tokenId || null,
+                    },
+                    marketdata: {
+                        id: "",
+                        createdAt: "",
+                        updatedAt: "",
+                        price: t.market_data?.price ?? t.marketdata?.price ?? "0",
+                        volume: t.market_data?.volume ?? t.marketdata?.volume ?? "0",
+                        circulatingSupply:
+                            t.market_data?.circulating_supply ?? t.marketdata?.circulatingSupply ?? "0",
+                        totalSupply: t.market_data?.total_supply ?? t.marketdata?.totalSupply ?? "0",
+                        tokenId: t.market_data?.token_id ?? undefined,
+                        liquidity: t.market_data?.liquidity ?? "0",
+                    },
+                    totalFeeUsd: t.totalFeeUsd || "0",
+                    prices: null,
+                }));
+
                 setAssets((prev) => ({
                     ...prev,
-                    [type]: res.data.tokens.data,
+                    [type]: normalizedTokens,
                 }));
+
+                const pagination = payload.pagination || {};
+                const totalPages = pagination.total_pages || 1;
+                const pageSize = pagination.page_size || 10;
                 setMeta((prev) => ({
                     ...prev,
                     [type]: {
-                        total: res.data.tokens.meta.total,
-                        lastPage: res.data.tokens.meta.lastPage,
+                        total: (pagination.total_count ?? pageSize * totalPages) as number,
+                        lastPage: totalPages,
                     },
                 }));
             })

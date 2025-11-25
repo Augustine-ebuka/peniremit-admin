@@ -11,7 +11,7 @@ import { routes } from "@/utils/routes";
 interface TransactionInfoProps {
     isModalOpen: boolean;
     closeModal: () => void;
-    transaction: Transaction;
+    transaction: any
 }
 
 const TransactionInfo: React.FC<TransactionInfoProps> = ({
@@ -19,18 +19,18 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
     closeModal,
     transaction,
 }) => {
-    let type = transaction.transactionType;
+    let type = transaction.transaction_type;
     const fee = Number(transaction.fee).toFixed(5);
     const calculateFeeUsd =
         Number(transaction.fee) *
-        Number(transaction.tokenInformation.marketdata?.price || 1);
+        Number(transaction.meta_data.amount_in_usd || 1);
     const feeUsd = Number(calculateFeeUsd).toFixed(2);
     const amount = Number(transaction.amount).toFixed(5);
     const calculateAmountUsd =
         Number(transaction.amount) *
-        Number(transaction.tokenInformation.marketdata?.price || 1);
+        Number(transaction.meta_data.amount_in_usd || 1);
     const amountUsd = Number(calculateAmountUsd).toFixed(2);
-    const symbol = transaction.tokenInformation.symbol;
+    const symbol = "";
     const router = useRouter();
 
     return (
@@ -95,14 +95,13 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
                             value={
                                 <div>
                                     <div>
-                                        {transaction.tokenInformation.name} (
-                                        {transaction.tokenInformation.symbol})
+                                        {""} (
+                                        {""})
                                     </div>
                                     <div className="text-sm">
                                         <ShortenerComponent
                                             value={
-                                                transaction.tokenInformation
-                                                    .address
+                                                transaction.from_address
                                             }
                                         />
                                     </div>
@@ -174,11 +173,11 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
                                         onClick={() =>
                                             router.push(
                                                 routes.dashboard.wallet(
-                                                    transaction.toAddress,
+                                                    transaction.to_address,
                                                 ),
                                             )
                                         }
-                                        value={transaction.toAddress}
+                                        value={transaction.to_address}
                                     />
                                 </span>
                             }
@@ -192,11 +191,11 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
                                         onClick={() =>
                                             router.push(
                                                 routes.dashboard.wallet(
-                                                    transaction.fromAddress,
+                                                    transaction.from_address,
                                                 ),
                                             )
                                         }
-                                        value={transaction.fromAddress}
+                                        value={transaction.from_address}
                                     />
                                 </span>
                             }

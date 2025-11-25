@@ -100,22 +100,23 @@ const Transactions = () => {
 
     const fetchTransactions = async () => {
         axios
-            .get(BASE_URL + "/api/transactions", {
+            .get(BASE_URL + "/transactions", {
                 headers: { Authorization: `Bearer ${token}` },
-                params: {
-                    duration_start: duration.start.toISOString(),
-                    duration_end: duration.end.toISOString(),
-                    s: debouncedSearchTerm,
-                    ...getFilter(),
-                    page,
-                    limit,
-                },
+                // params: {
+                //     duration_start: duration.start.toISOString(),
+                //     duration_end: duration.end.toISOString(),
+                //     s: debouncedSearchTerm,
+                //     ...getFilter(),
+                //     page,
+                //     limit,
+                // },
             })
             .then((res) => {
-                setTransaction(res.data.transactions.data);
+                console.log("Transactions response: ", res);
+                setTransaction(res.data.data.transactions);
                 setMeta({
-                    total: res.data.transactions.meta.total,
-                    lastPage: res.data.transactions.meta.lastPage,
+                    total: res.data.data.pagination.total_pages,
+                    lastPage: res.data.data.pagination.page_size,
                 });
             })
             .catch((err) => {
@@ -128,7 +129,7 @@ const Transactions = () => {
 
     const fetchTransactionsAnalytics = async () => {
         axios
-            .get(BASE_URL + "/api/transactions/analytics", {
+            .get(BASE_URL + "/transactions/analytics", {
                 headers: { Authorization: `Bearer ${token}` },
                 params: {
                     duration_start: duration.start.toISOString(),

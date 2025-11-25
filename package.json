@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
+        "dev": "next dev -H control-panel.pwadmins.com -p 3000",
         "build": "next build",
         "start": "next start",
         "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,html}' --ignore-path '.prettierignore,.next'",
@@ -21,6 +21,7 @@
         "@types/uuid": "^10.0.0",
         "eslint": "^8.57.0",
         "eslint-config-next": "14.2.3",
+        "http-proxy-middleware": "^3.0.5",
         "postcss": "^8.4.41",
         "tailwindcss": "^3.4.8",
         "typescript": "^5.5.4"
@@ -48,5 +49,6 @@
         "redux-persist": "^6.0.0",
         "short-number": "^1.0.7",
         "viem": "^2.19.3"
-    }
+    },
+    "proxy": "http://api.control-panel.pwadmins.com"
 }

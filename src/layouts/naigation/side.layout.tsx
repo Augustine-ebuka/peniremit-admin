@@ -41,17 +41,21 @@ const SideLayout = ({ open, close }: { open: boolean; close: () => void }) => {
             });
     }, [token]);
 
+    // useEffect(() => {
+    //     const id = setInterval(() => {
+    //         fetchPending();
+    //     }, 5000);
+
+    //     setIntervalId(id);
+
+    //     return () => {
+    //         if (intervalId) clearInterval(intervalId);
+    //     };
+    // }, []);
+
     useEffect(() => {
-        const id = setInterval(() => {
-            fetchPending();
-        }, 5000);
-
-        setIntervalId(id);
-
-        return () => {
-            if (intervalId) clearInterval(intervalId);
-        };
-    }, []);
+        fetchPending();
+    }, [fetchPending]);
 
     return (
         <div

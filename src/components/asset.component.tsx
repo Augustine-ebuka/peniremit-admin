@@ -16,14 +16,14 @@ const AssetComponent = ({
         >
             <ImageComponent
                 className="flex-shrink-0 h-10 w-10 rounded-full"
-                src={token.logoUrl}
-                alt={token.name}
+                src={""}
+                alt={""}
             />
             <div className="flex flex-col">
-                <p className="text-white text-sm px-2 ">{token.name}</p>
-                {token.symbol && (
+                <p className="text-white text-sm px-2 ">{"token name"}</p>
+                {true && (
                     <p className="text-neutral-400 text-xs px-2 text-left">
-                        {token.symbol}
+                        {"token symbol"}
                     </p>
                 )}
             </div>

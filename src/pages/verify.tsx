@@ -41,16 +41,16 @@ const Verify = () => {
         };
     }, [resendTimer]);
 
-    const shortenEmail = (value: string) => {
-        const [username, domain] = value.split("@");
-        const domainParts = domain.split(".");
+    const shortenEmail = (value?: string) => {
+        if (!value) return "";
+
+        const [username = "", domain = ""] = value.split("@");
+        const domainParts = (domain && domain.split(".")) || [""];
 
         const shortenedUsername =
-            username.length > 3
-                ? `${username.slice(0, 3)}***`
-                : `${username[0]}***`;
+            username.length > 3 ? `${username.slice(0, 3)}***` : `${username[0] || ""}***`;
 
-        const shortenedDomain = `${domainParts[0][0]}***.${domainParts[1]}`;
+        const shortenedDomain = domainParts.length > 1 ? `${(domainParts[0][0] || "")}***.${domainParts[1]}` : domain;
 
         return `${shortenedUsername}@${shortenedDomain}`;
     };
@@ -66,15 +66,16 @@ const Verify = () => {
         setErrorMessage("");
 
         axios
-            .post(BASE_URL + "/api/auth/login", {
-                code: otp,
-                email,
+            .post(BASE_URL + "/auth/verify-otp", {
+                otp: otp,
+                email: email,
             })
             .then((response) => {
+                console.log(response);
                 dispatch(
                     login({
-                        user: response.data.user,
-                        token: response.data.accessToken.value,
+                        user: response?.data?.data?.user,
+                        token: response?.data?.data?.token,
                     }),
                 );
 
@@ -82,7 +83,8 @@ const Verify = () => {
                 router.push(routes.dashboard.index);
             })
             .catch((error) => {
-                const msg = error?.response?.data?.errors?.message;
+                console.log(error);
+                const msg = error?.response?.data
                 const msg2 = error?.response?.data?.errors?.[0]?.message;
                 const msg3 = error?.response?.data?.message;
                 setErrorMessage(msg || msg2 || msg3 || "An error occurred");
@@ -92,6 +94,8 @@ const Verify = () => {
             });
     };
 
+
+
     const handleResend = () => {
         if (!canResend) return;
 
@@ -99,7 +103,7 @@ const Verify = () => {
         setErrorMessage("");
 
         axios
-            .post(BASE_URL + "/api/auth/request-otp", { email })
+            .post(BASE_URL + "/auth", { email })
             .then(() => {
                 setResendTimer(59);
                 setCanResend(false);

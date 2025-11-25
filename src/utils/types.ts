@@ -8,14 +8,14 @@ export interface User {
     id: number;
     username: string;
     email: string;
-    emailVerifiedAt: string;
-    passwordResetTokenExpiry: string;
-    createdAt: string;
-    updatedAt: string;
+    emailVerifiedAt?: string;
+    passwordResetTokenExpiry?: string;
+    createdAt?: string;
+    updatedAt?: string;
     role: "admin" | "moderator" | "superadmin"; // Adjust based on possible
     status: "approved" | "pending" | "rejected";
-    deletedAt: boolean;
-    avatarUrl: string | null;
+    deletedAt?: boolean;
+    avatarUrl?: string | null;
 }
 
 interface AnlyticsTotals {

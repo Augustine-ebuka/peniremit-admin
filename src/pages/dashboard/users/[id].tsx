@@ -189,7 +189,7 @@ export default function UserDetail() {
         setLoading(true);
 
         axios
-            .get(`${BASE_URL}/api/users/${userId}`, {
+            .get(`${BASE_URL}/users/${user?.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data", // Important for file uploads

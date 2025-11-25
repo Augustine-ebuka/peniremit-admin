@@ -3,7 +3,7 @@ import { bsc } from "viem/chains";
 import { User } from "./types";
 
 export const BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://api.admin.peniwallet.com";
+    process.env.NEXT_PUBLIC_API_URL || "https://admin.staging.peniwallet.com";
 
 export const get = (value: string | number | undefined, loading: boolean) => {
     if (loading || !value) {
