@@ -15,6 +15,7 @@ import { endOfDay, startOfDay } from "date-fns";
 import { ArrowRightLeft, Search, SortAsc, SortDesc, Users } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import api from "@/lib/api";
 
 type TransactionType = "all" | "transfer" | "swap" | "spray";
 type TransactionAggregateMethod = "count" | "sum";
@@ -98,37 +99,63 @@ const Transactions = () => {
         }
     };
 
+    // const fetchTransactions = async () => {
+    //     axios
+    //         .get(BASE_URL + "/transactions", {
+    //             headers: { Authorization: `Bearer ${token}` },
+    //             params: {
+    //                 duration_start: duration.start.toISOString(),
+    //                 duration_end: duration.end.toISOString(),
+    //                 s: debouncedSearchTerm,
+    //                 ...getFilter(),
+    //                 page,
+    //                 limit,
+    //             },
+    //         })
+    //         .then((res) => {
+    //             setTransaction(res.data.data.transactions);
+    //             setMeta({
+    //                 total: res.data.data.pagination.total_pages,
+    //                 lastPage: res.data.data.pagination.page_size,
+    //             });
+    //         })
+    //         .catch((err) => {
+    //             console.log("Error fetching assets: ", err);
+    //         })
+    //         .finally(() => {
+    //             setIsLoading(false);
+    //         });
+    // };
+
     const fetchTransactions = async () => {
-        axios
-            .get(BASE_URL + "/transactions", {
-                headers: { Authorization: `Bearer ${token}` },
-                // params: {
-                //     duration_start: duration.start.toISOString(),
-                //     duration_end: duration.end.toISOString(),
-                //     s: debouncedSearchTerm,
-                //     ...getFilter(),
-                //     page,
-                //     limit,
-                // },
-            })
-            .then((res) => {
-                setTransaction(res.data.data.transactions);
-                setMeta({
-                    total: res.data.data.pagination.total_pages,
-                    lastPage: res.data.data.pagination.page_size,
-                });
-            })
-            .catch((err) => {
-                console.log("Error fetching assets: ", err);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+    api.get("/transactions", {
+        headers: { Authorization: `Bearer ${token}` },
+        params: {
+            duration_start: duration.start.toISOString(),
+            duration_end: duration.end.toISOString(),
+            s: debouncedSearchTerm,
+            ...getFilter(),
+            page,
+            limit,
+        },
+        })
+        .then((res) => {
+        setTransaction(res.data.data.transactions);
+        setMeta({
+            total: res.data.data.pagination.total_pages,
+            lastPage: res.data.data.pagination.page_size,
+        });
+        })
+        .catch((err) => {
+        console.log("Error fetching assets: ", err);
+        })
+        .finally(() => {
+        setIsLoading(false);
+        });
     };
 
     const fetchTransactionsAnalytics = async () => {
-        axios
-            .get(BASE_URL + "/transactions/stats", {
+        api.get("/transactions/stats", {
                 headers: { Authorization: `Bearer ${token}` },
                 params: {
                     duration_start: duration.start.toISOString(),
@@ -137,7 +164,6 @@ const Transactions = () => {
                 },
             })
             .then((res) => {
-                console.log("Analytics response: ", res.data);
                 const data = res.data.data;
 
                 // Calculate total transactions across all types
@@ -156,10 +182,10 @@ const Transactions = () => {
 
                 // Calculate total percentage change
                 const totalChangePercentage =
-                    ((data.total_guest_transaction_increase_this_week || 0) +
-                    (data.total_spray_transaction_increase_this_week || 0) +
-                    (data.total_swap_transaction_increase_this_week || 0) +
-                    (data.total_transfer_transaction_increase_this_week || 0)) / 4;
+                    ((data.total_guest_transaction_increase_this_range || 0) +
+                    (data.total_spray_transaction_increase_this_range || 0) +
+                    (data.total_swap_transaction_increase_this_range || 0) +
+                    (data.total_transfer_transaction_increase_this_range || 0)) / 4;
 
                 setAnalytics({
                     totaltransactions: {
@@ -170,19 +196,19 @@ const Transactions = () => {
                         value: aggregateMethod === "sum"
                             ? parseFloat(data.total_transfer_amount || 0)
                             : data.total_transfer_transactions,
-                        percentage: Math.round(data.total_transfer_transaction_increase_this_week || 0),
+                        percentage: Math.round(data.total_transfer_transaction_increase_this_range || 0),
                     },
                     totalswaps: {
                         value: aggregateMethod === "sum"
                             ? parseFloat(data.total_swap_amount || 0)
                             : data.total_swap_transactions,
-                        percentage: Math.round(data.total_swap_transaction_increase_this_week || 0),
+                        percentage: Math.round(data.total_swap_transaction_increase_this_range || 0),
                     },
                     totalsprays: {
                         value: aggregateMethod === "sum"
                             ? parseFloat(data.total_spray_amount || 0)
                             : data.total_spray_transactions,
-                        percentage: Math.round(data.total_spray_transaction_increase_this_week || 0),
+                        percentage: Math.round(data.total_spray_transaction_increase_this_range || 0),
                     },
                     totalFeeUsd: {
                         value: aggregateMethod === "sum" ? totalAmount : totalTransactions,

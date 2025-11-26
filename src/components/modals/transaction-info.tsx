@@ -32,7 +32,6 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
     const amountUsd = Number(calculateAmountUsd).toFixed(2);
     const symbol = "";
     const router = useRouter();
-
     return (
         <ModalComponent isOpen={isModalOpen} onClose={closeModal} noHeader>
             <div className="flex flex-col px-6 py-6 overflow-scroll">
@@ -95,7 +94,7 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
                             value={
                                 <div>
                                     <div>
-                                        {""} ({""})
+                                        {/* {transaction.} ({""}) */}
                                     </div>
                                     <div className="text-sm">
                                         <ShortenerComponent
@@ -140,10 +139,10 @@ const TransactionInfo: React.FC<TransactionInfoProps> = ({
                             value={
                                 <span>
                                     <span>
-                                        {amount} {symbol}
+                                        {Number(transaction.meta_data.received_amount).toFixed(5)} {symbol}
                                     </span>{" "}
                                     <span className="text-xs text-neutral-400">
-                                        (${amountUsd})
+                                        (${transaction.meta_data.received_amount_usd})
                                     </span>
                                 </span>
                             }
