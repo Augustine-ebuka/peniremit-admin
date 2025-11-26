@@ -112,7 +112,6 @@ const Transactions = () => {
                 // },
             })
             .then((res) => {
-                console.log("Transactions response: ", res);
                 setTransaction(res.data.data.transactions);
                 setMeta({
                     total: res.data.data.pagination.total_pages,
