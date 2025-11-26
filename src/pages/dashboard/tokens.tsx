@@ -21,7 +21,7 @@ import { Coins, Filter, Plus, Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-
+import api from "@/lib/api";
 const initTabs: Tab[] = [
     { id: "active", label: "Active tokens", count: 0 },
     { id: "excluded", label: "Excluded tokens", count: 0 },
@@ -135,8 +135,7 @@ const Token = () => {
     }, [selectedFilter, selectedType]);
 
     const loadAssets = (type: TabType = "active") => {
-        axios
-            .get(BASE_URL + "/tokens", {
+        api.get("/tokens", {
                 headers: { Authorization: `Bearer ${token}` },
                 params: {
                     duration_start: duration.start.toISOString(),

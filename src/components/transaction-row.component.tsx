@@ -18,16 +18,6 @@ const TransactionRow = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { fetchTokenByAddress, loading: fetchingToken } = useFetchToken();
-    const fee = Number(transaction.fee).toFixed(5);
-    const calculateFeeUsd =
-        Number(transaction.fee) *
-        Number(transaction.meta_data.amount_in_usd || 1);
-    const feeUsd = Number(calculateFeeUsd).toFixed(2);
-    const amount = Number(transaction.amount_usd).toFixed(5);
-    const calculateAmountUsd =
-        Number(transaction.amount_usd) *
-        Number(transaction.meta_data.amount_in_usd || 1);
-    const amountUsd = Number(calculateAmountUsd).toFixed(2);
     const symbol = "";
     const { assetInfo } = useModalContext();
 
@@ -37,6 +27,32 @@ const TransactionRow = ({
             !!transaction.meta_data?.token_out
         );
     }, [transaction]);
+
+    // Handle different API response shapes for swap vs transfer
+    const getAmount = () => {
+        if (isSwap) {
+            // Swap: use amount_in from meta_data
+            return Number(transaction.meta_data?.amount_in || 0).toFixed(5);
+        } else {
+            // Transfer/Spray/Guest: use received_amount from meta_data
+            return Number(transaction.meta_data?.received_amount || 0).toFixed(5);
+        }
+    };
+
+    const getAmountUsd = () => {
+        if (isSwap) {
+            // Swap: use amount_in_usd from meta_data
+            return Number(transaction.meta_data?.amount_in_usd || 0).toFixed(2);
+        } else {
+            // Transfer/Spray/Guest: use received_amount_usd from meta_data
+            return Number(transaction.meta_data?.received_amount_usd || 0).toFixed(2);
+        }
+    };
+
+    const fee = Number(transaction.fee).toFixed(5);
+    const feeUsd = Number(transaction.meta_data?.fee_usd || 0).toFixed(2);
+    const amount = getAmount();
+    const amountUsd = getAmountUsd();
 
     const handleAssetClick = async (tokenAddress: string) => {
         if (!tokenAddress) {
@@ -113,7 +129,7 @@ const TransactionRow = ({
             <td className="py-4 px-4">
                 <div>
                     <p>
-                        {Number(transaction.meta_data.amount_in).toFixed(5)} {symbol}
+                        {amount} {symbol}
                     </p>
                     <p className="text-xs text-neutral-600">${amountUsd}</p>
                 </div>
