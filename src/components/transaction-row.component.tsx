@@ -113,7 +113,7 @@ const TransactionRow = ({
             <td className="py-4 px-4">
                 <div>
                     <p>
-                        {Number(transaction.amount_usd).toFixed(5)} {symbol}
+                        {Number(transaction.meta_data.amount_in).toFixed(5)} {symbol}
                     </p>
                     <p className="text-xs text-neutral-600">${amountUsd}</p>
                 </div>

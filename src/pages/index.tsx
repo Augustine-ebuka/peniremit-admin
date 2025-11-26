@@ -14,9 +14,29 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    // Email validation regex - basic pattern check
+    const isValidEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
     const handleLogin = () => {
-        setIsLoading(true);
         setErrorMessage("");
+
+        // Validate email format
+        if (!email || email.trim() === "") {
+            setErrorMessage("Email address is required");
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            setErrorMessage(
+                "Please enter a valid email address (e.g., jane@gmail.com)",
+            );
+            return;
+        }
+
+        setIsLoading(true);
 
         axios
             .post(BASE_URL + "/auth", {

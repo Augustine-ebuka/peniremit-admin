@@ -128,7 +128,7 @@ const Transactions = () => {
 
     const fetchTransactionsAnalytics = async () => {
         axios
-            .get(BASE_URL + "/transactions/analytics", {
+            .get(BASE_URL + "/transactions/stats", {
                 headers: { Authorization: `Bearer ${token}` },
                 params: {
                     duration_start: duration.start.toISOString(),
@@ -137,52 +137,58 @@ const Transactions = () => {
                 },
             })
             .then((res) => {
-                // setAnalytics(res.data.analytics);
-                const { current, previous } = res.data.analytics;
-                setAnalytics(() => ({
-                    totalFeeUsd: {
-                        value: current.totalFeeUsd,
-                        percentage: Math.round(
-                            ((current.totalFeeUsd - previous.totalFeeUsd) /
-                                Number(previous.totalFeeUsd)) *
-                                100,
-                        ),
-                    },
+                console.log("Analytics response: ", res.data);
+                const data = res.data.data;
+
+                // Calculate total transactions across all types
+                const totalTransactions =
+                    data.total_guest_transactions +
+                    data.total_spray_transactions +
+                    data.total_swap_transactions +
+                    data.total_transfer_transactions;
+
+                // Calculate total amount across all types
+                const totalAmount =
+                    parseFloat(data.total_guest_amount || 0) +
+                    parseFloat(data.total_spray_amount || 0) +
+                    parseFloat(data.total_swap_amount || 0) +
+                    parseFloat(data.total_transfer_amount || 0);
+
+                // Calculate total percentage change
+                const totalChangePercentage =
+                    ((data.total_guest_transaction_increase_this_week || 0) +
+                    (data.total_spray_transaction_increase_this_week || 0) +
+                    (data.total_swap_transaction_increase_this_week || 0) +
+                    (data.total_transfer_transaction_increase_this_week || 0)) / 4;
+
+                setAnalytics({
                     totaltransactions: {
-                        value: current.totaltransactions,
-                        percentage: Math.round(
-                            ((current.totaltransactions -
-                                previous.totaltransactions) /
-                                (Number(previous.totaltransactions) || 1)) *
-                                100,
-                        ),
+                        value: totalTransactions,
+                        percentage: Math.round(totalChangePercentage),
                     },
                     totaltransfers: {
-                        value: current.totaltransfers,
-                        percentage: Math.round(
-                            ((current.totaltransfers -
-                                previous.totaltransfers) /
-                                (Number(previous.totaltransfers) || 1)) *
-                                100,
-                        ),
+                        value: aggregateMethod === "sum"
+                            ? parseFloat(data.total_transfer_amount || 0)
+                            : data.total_transfer_transactions,
+                        percentage: Math.round(data.total_transfer_transaction_increase_this_week || 0),
                     },
                     totalswaps: {
-                        value: current.totalswaps,
-                        percentage: Math.round(
-                            ((current.totalswaps - previous.totalswaps) /
-                                (Number(previous.totalswaps) || 1)) *
-                                100,
-                        ),
+                        value: aggregateMethod === "sum"
+                            ? parseFloat(data.total_swap_amount || 0)
+                            : data.total_swap_transactions,
+                        percentage: Math.round(data.total_swap_transaction_increase_this_week || 0),
                     },
                     totalsprays: {
-                        value: current.totalsprays,
-                        percentage: Math.round(
-                            ((current.totalsprays - previous.totalsprays) /
-                                (Number(previous.totalsprays) || 1)) *
-                                100,
-                        ),
+                        value: aggregateMethod === "sum"
+                            ? parseFloat(data.total_spray_amount || 0)
+                            : data.total_spray_transactions,
+                        percentage: Math.round(data.total_spray_transaction_increase_this_week || 0),
                     },
-                }));
+                    totalFeeUsd: {
+                        value: aggregateMethod === "sum" ? totalAmount : totalTransactions,
+                        percentage: Math.round(totalChangePercentage),
+                    },
+                });
             })
             .catch((err) => {
                 console.log("Error fetching analytics: ", err);
@@ -194,7 +200,7 @@ const Transactions = () => {
 
     useEffect(() => {
         fetchTransactions();
-        // fetchTransactionsAnalytics();
+        fetchTransactionsAnalytics();
     }, [
         debouncedSearchTerm,
         debouncedSearchTerm,
@@ -377,7 +383,7 @@ const Transactions = () => {
                                 transaction={transaction}
                                 refresh={() => {
                                     fetchTransactions();
-                                    // fetchTransactionsAnalytics();
+                                    fetchTransactionsAnalytics();
                                 }}
                             />
                         ))}
