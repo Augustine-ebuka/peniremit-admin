@@ -173,7 +173,7 @@ const AssetRowComponent = ({
                             )
                         ) : (
                             <FormatNumber
-                                value={Number(asset.marketdata?.price || 0)}
+                                value={Number(asset.market_data?.liquidity || 0)}
                                 currency="$"
                             />
                         )}

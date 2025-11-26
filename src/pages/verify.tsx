@@ -23,8 +23,10 @@ const Verify = () => {
     const [canResend, setCanResend] = useState(false);
 
     useEffect(() => {
-        if (!email) router.push(routes.login);
-    }, [email]);
+        if (!email) {
+            router.push(routes.login);
+        }
+    }, [email, router]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -67,6 +69,10 @@ const Verify = () => {
     };
 
     const handleVerify = () => {
+        if (!otp || otp.length === 0) {
+            setErrorMessage("Please enter the OTP");
+            return;
+        }
         setIsLoading(true);
         setErrorMessage("");
 
@@ -76,25 +82,37 @@ const Verify = () => {
                 email: email,
             })
             .then((response) => {
-                console.log(response);
+                console.log("Verify response:", response);
+                
+                const userData = response?.data?.data?.user;
+                const tokenData = response?.data?.data?.token;
+                
+                if (!userData || !tokenData) {
+                    throw new Error("Missing user or token in response");
+                }
+                
                 dispatch(
                     login({
-                        user: response?.data?.data?.user,
-                        token: response?.data?.data?.token,
+                        user: userData,
+                        token: tokenData,
                     }),
                 );
 
                 toast.success("Login sucessful, redirecting to dashboard...");
-                router.push(routes.dashboard.index);
+                
+                // Use replace instead of push to prevent back button issues
+                // Add longer delay to ensure state persists
+                setTimeout(() => {
+                    router.replace(routes.dashboard.index);
+                }, 1000);
             })
             .catch((error) => {
-                console.log(error);
-                const msg = error?.response?.data;
+                console.error("Verify error:", error);
+                const msg = error?.response?.data?.message;
                 const msg2 = error?.response?.data?.errors?.[0]?.message;
-                const msg3 = error?.response?.data?.message;
-                setErrorMessage(msg || msg2 || msg3 || "An error occurred");
-            })
-            .finally(() => {
+                const msg3 = error?.response?.data?.errors?.message;
+                const fallbackMsg = error?.message || "An error occurred";
+                setErrorMessage(msg || msg2 || msg3 || fallbackMsg);
                 setIsLoading(false);
             });
     };

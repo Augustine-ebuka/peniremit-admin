@@ -53,9 +53,10 @@ const SideLayout = ({ open, close }: { open: boolean; close: () => void }) => {
     //     };
     // }, []);
 
-    useEffect(() => {
-        fetchPending();
-    }, [fetchPending]);
+    // had to comment it out because dont know what is does
+    // useEffect(() => {
+    //     fetchPending();
+    // }, [fetchPending]);
 
     return (
         <div
@@ -75,59 +76,59 @@ const SideLayout = ({ open, close }: { open: boolean; close: () => void }) => {
                 icon={Grid2X2}
                 url={routes.dashboard.index}
             />
-            <NavLink
+            {/* <NavLink
                 title="Rankings"
                 icon={SortAsc}
                 url={routes.dashboard.rankings}
-            />
+            /> */}
             <NavLink
                 title="Tokens"
                 icon={Coins}
                 url={routes.dashboard.assets}
             />
-            {isAdmin(user) && (
+            {/* {isAdmin(user) && (
                 <NavLink
                     title="Fees"
                     icon={MoneyIcon}
                     url={routes.dashboard.fees}
                 />
-            )}
+            )} */}
 
             <NavLink
                 title="Transactions"
                 icon={ArrowRightLeft}
                 url={routes.dashboard.transactions}
             />
-            <NavLink
+            {/* <NavLink
                 title="Wallets"
                 icon={Wallet}
                 url={routes.dashboard.wallets}
-            />
-            <NavLink
+            /> */}
+            {/* <NavLink
                 title="Listings"
                 icon={Box}
                 url={routes.dashboard.listings}
-            />
-            {isAdmin(user) && (
+            /> */}
+            {/* {isAdmin(user) && (
                 <NavLink
                     title="Relays"
                     icon={Radius}
                     url={routes.dashboard.relays}
                 />
-            )}
-            <NavLink
+            )} */}
+            {/* <NavLink
                 title="Activities"
                 icon={CircleGauge}
                 url={routes.dashboard.activities}
-            />
-            {isAdmin(user) && (
+            /> */}
+            {/* {isAdmin(user) && (
                 <NavLink
                     title="Notifications"
                     icon={Notification1}
                     url={routes.dashboard.notifications}
                 />
-            )}
-            {isAdmin(user) && (
+            )} */}
+            {/* {isAdmin(user) && (
                 <NavLink
                     title="Admins"
                     icon={User}
@@ -138,7 +139,7 @@ const SideLayout = ({ open, close }: { open: boolean; close: () => void }) => {
                         </span>
                     }
                 />
-            )}
+            )} */}
             <NavLink
                 title="Settings"
                 icon={Bolt}

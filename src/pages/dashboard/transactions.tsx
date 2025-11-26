@@ -195,7 +195,7 @@ const Transactions = () => {
 
     useEffect(() => {
         fetchTransactions();
-        fetchTransactionsAnalytics();
+        // fetchTransactionsAnalytics();
     }, [
         debouncedSearchTerm,
         debouncedSearchTerm,
@@ -378,7 +378,7 @@ const Transactions = () => {
                                 transaction={transaction}
                                 refresh={() => {
                                     fetchTransactions();
-                                    fetchTransactionsAnalytics();
+                                    // fetchTransactionsAnalytics();
                                 }}
                             />
                         ))}

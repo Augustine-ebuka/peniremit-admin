@@ -15,32 +15,46 @@ const AuthLayout = ({ children }: any) => {
     const { token, user } = useSelector((state: RootState) => state.auth);
     const router = useRouter();
     const [navOpen, setNavOpen] = useState(false);
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const dispatch = useDispatch();
     const { notifyError } = useToast();
 
     const handleUserData = async () => {
-        axios
-            .get(BASE_URL + `/users/${user?.id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((response) => {
+        try {
+            if (user?.id) {
+                const response = await axios.get(
+                    BASE_URL + `/users/${user.id}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
                 dispatch(
                     login({
                         user: response.data.user,
                         token: token!,
                     }),
                 );
-            })
-            .catch(() => {
-                notifyError("An error occurred while fetching user data");
-            });
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            // Don't break the flow - just log the error
+        } finally {
+            setIsCheckingAuth(false);
+        }
     };
 
     useEffect(() => {
-        handleUserData();
-    }, []);
+        if (token && user?.id) {
+            handleUserData();
+        } else {
+            setIsCheckingAuth(false);
+        }
+    }, [token, user?.id]);
 
     useEffect(() => {
+        // Only perform auth checks after we've checked user data
+        if (isCheckingAuth) return;
+
         if (!token) {
             router.replace(routes.login);
         } else if (user) {
@@ -54,7 +68,20 @@ const AuthLayout = ({ children }: any) => {
                 router.replace(routes.dashboard.deleted);
             }
         }
-    }, [token]);
+    }, [token, user, isCheckingAuth]);
+
+    // Show loading state while checking auth
+    if (isCheckingAuth) {
+        return (
+            <main className="h-screen flex items-center justify-center bg-primary">
+                <div className="text-white text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                    <p>Verifying your session...</p>
+                </div>
+            </main>
+        );
+    }
+
     return (
         <main className="h-screen flex flex-col">
             <TopLayout />

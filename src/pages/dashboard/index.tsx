@@ -205,7 +205,7 @@ const Dashboard = () => {
     );
 
     useEffect(() => {
-        loadAnalytics();
+        // loadAnalytics();
     }, [duration]);
 
     return (

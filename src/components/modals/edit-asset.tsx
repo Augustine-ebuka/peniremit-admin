@@ -83,7 +83,7 @@ const EditAsset: React.FC<EditAssetProps> = ({ token, refresh }) => {
         if (avatar) formData.append("avatar", avatar);
 
         axios
-            .put(BASE_URL + "/api/assets/" + token?.address, formData, {
+            .put(BASE_URL + `/tokens/${token?.address}`, formData, {
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                 },

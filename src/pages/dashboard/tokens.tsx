@@ -283,7 +283,7 @@ const Token = () => {
         setIsLoading(true);
         loadAssets("active");
         loadAssets("excluded");
-        loadAnalytics();
+        // loadAnalytics();
     };
 
     useEffect(() => {

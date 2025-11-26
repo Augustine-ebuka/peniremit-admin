@@ -59,6 +59,8 @@ export interface TokenMetadata {
     communityLinks: CommunityLink[];
     listed: boolean;
     tokenId: string;
+    logo_url?:string;
+    liquidity?: number;
     removeFromFeesCalculation?: boolean;
 }
 
@@ -98,6 +100,7 @@ export interface Token {
     marketdata: TokenMarketData;
     totalFeeUsd: string;
     prices: TokenPriceData | null;
+    market_data:TokenMarketData;
 }
 
 export interface TokenResponse {
