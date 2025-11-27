@@ -26,10 +26,7 @@ const Transactions = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [transactions, setTransaction] = useState<Transaction[]>([]);
     const [analytics, setAnalytics] = useState({
-        totaltransactions: {
-            value: 0,
-            percentage: 0,
-        },
+        totaltransactions: { value: 0, percentage: 0},
         totaltransfers: { value: 0, percentage: 0 },
         totalswaps: { value: 0, percentage: 0 },
         totalsprays: { value: 0, percentage: 0 },
@@ -137,6 +134,7 @@ const Transactions = () => {
             ...getFilter(),
             page,
             limit,
+            type: type
         },
         })
         .then((res) => {
@@ -166,48 +164,31 @@ const Transactions = () => {
             .then((res) => {
                 const data = res.data.data;
 
-                // Calculate total transactions across all types
-                const totalTransactions =
-                    data.total_guest_transactions +
-                    data.total_spray_transactions +
-                    data.total_swap_transactions +
-                    data.total_transfer_transactions;
-
                 // Calculate total amount across all types
-                const totalAmount =
-                    parseFloat(data.total_guest_amount || 0) +
-                    parseFloat(data.total_spray_amount || 0) +
-                    parseFloat(data.total_swap_amount || 0) +
-                    parseFloat(data.total_transfer_amount || 0);
+                const totalAmount = parseFloat(data.total_amount || 0)
+
+                // Calculate total transactions across all types
+                const totalTransactions =  aggregateMethod === "sum" ? totalAmount : data.total_transactions
 
                 // Calculate total percentage change
-                const totalChangePercentage =
-                    ((data.total_guest_transaction_increase_this_range || 0) +
-                    (data.total_spray_transaction_increase_this_range || 0) +
-                    (data.total_swap_transaction_increase_this_range || 0) +
-                    (data.total_transfer_transaction_increase_this_range || 0)) / 4;
+                const totalChangePercentage = data.total_transaction_increase_this_range
+
 
                 setAnalytics({
                     totaltransactions: {
-                        value: totalTransactions,
-                        percentage: Math.round(totalChangePercentage),
+                        value: totalTransactions || 0,
+                        percentage: Math.round(totalChangePercentage || 0),
                     },
                     totaltransfers: {
-                        value: aggregateMethod === "sum"
-                            ? parseFloat(data.total_transfer_amount || 0)
-                            : data.total_transfer_transactions,
+                        value: aggregateMethod === "sum" ? parseFloat(data.total_transfer_amount || 0) : data.total_transfer_transactions || 0,
                         percentage: Math.round(data.total_transfer_transaction_increase_this_range || 0),
                     },
                     totalswaps: {
-                        value: aggregateMethod === "sum"
-                            ? parseFloat(data.total_swap_amount || 0)
-                            : data.total_swap_transactions,
+                        value: aggregateMethod === "sum" ? parseFloat(data.total_swap_amount) : data.total_swap_transactions || 0 ,
                         percentage: Math.round(data.total_swap_transaction_increase_this_range || 0),
                     },
                     totalsprays: {
-                        value: aggregateMethod === "sum"
-                            ? parseFloat(data.total_spray_amount || 0)
-                            : data.total_spray_transactions,
+                        value:  aggregateMethod === "sum" ? parseFloat(data.total_spray_amount) : data.total_spray_transactions || 0,
                         percentage: Math.round(data.total_spray_transaction_increase_this_range || 0),
                     },
                     totalFeeUsd: {
@@ -339,7 +320,7 @@ const Transactions = () => {
                             className="py-3.5"
                             selectedValue={type}
                             setSelectedValue={(data) =>
-                                setType(data as TransactionType)
+                            setType(data as TransactionType)
                             }
                             placeHolder="Type"
                         />
