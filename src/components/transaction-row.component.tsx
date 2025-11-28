@@ -51,7 +51,7 @@ const TransactionRow = ({
     };
 
     const fee = Number(transaction.fee).toFixed(5);
-    const feeUsd = Number(transaction.meta_data?.fee_usd || 0).toFixed(2);
+    const feeUsd = Number(transaction?.fee || 0).toFixed(6);
     const amount = getAmount();
     const amountUsd = getAmountUsd();
 
