@@ -18,6 +18,7 @@ const TransactionRow = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { fetchTokenByAddress, loading: fetchingToken } = useFetchToken();
+
     const symbol = "";
     const { assetInfo } = useModalContext();
 
@@ -42,10 +43,10 @@ const TransactionRow = ({
     const getAmountUsd = () => {
         if (isSwap) {
             // Swap: use amount_in_usd from meta_data
-            return Number(transaction.meta_data?.amount_in_usd || 0).toFixed(2);
+            return Number(transaction.meta_data?.amount_in_usd || 0).toFixed(6);
         } else {
             // Transfer/Spray/Guest: use received_amount_usd from meta_data
-            return Number(transaction.meta_data?.received_amount_usd || 0).toFixed(2);
+            return Number(transaction.meta_data?.received_amount_usd || 0).toFixed(6);
         }
     };
 
@@ -69,6 +70,16 @@ const TransactionRow = ({
 
     return (
         <tr className="text-left border-b border-dark">
+            <td className="py-4 px-4">
+                <div className="flex">
+                    <button className="p-2  rounded-full hover:bg-dark/30 w-auto">
+                        <AssetComponent
+                            token={transaction.token}
+                            onClick={()=>{}}
+                        />
+                    </button>
+                </div>
+            </td>
             <td className="py-4 px-4">
                 <ShortenerComponent
                     onClick={() => setIsModalOpen(true)}
@@ -96,7 +107,7 @@ const TransactionRow = ({
                         <ShortenerComponent
                             value={
                                 transaction.meta_data?.token_in ||
-                                transaction.token
+                                transaction.token.address
                             }
                             startChars={8}
                             endChars={6}
@@ -117,7 +128,7 @@ const TransactionRow = ({
                                 className="cursor-pointer hover:opacity-80 transition-opacity"
                             >
                                 <ShortenerComponent
-                                    value={transaction.meta_data?.token_out}
+                                    value={transaction.meta_data?.token_out || 'NA' }
                                     startChars={8}
                                     endChars={6}
                                 />

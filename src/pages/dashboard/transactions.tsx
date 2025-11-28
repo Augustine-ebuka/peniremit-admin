@@ -188,7 +188,7 @@ const Transactions = () => {
                         percentage: Math.round(data.total_swap_transaction_increase_this_range || 0),
                     },
                     totalsprays: {
-                        value:  aggregateMethod === "sum" ? parseFloat(data.total_spray_amount) : data.total_spray_transactions || 0,
+                        value:  aggregateMethod === "sum" ? parseFloat(data.total_spray_amount) || 0 : data.total_spray_transactions || 0,
                         percentage: Math.round(data.total_spray_transaction_increase_this_range || 0),
                     },
                     totalFeeUsd: {
@@ -361,6 +361,9 @@ const Transactions = () => {
                 <table className="w-full min-w-[100px]">
                     <thead className="">
                         <tr className=" text-left  bg-dark">
+                            <th className="min-w-[50px] py-5 px-4 font-medium text-white ">
+                                Token
+                            </th>
                             <th className="min-w-[150px] py-5 px-4 font-medium text-white rounded-tl-lg">
                                 Transaction Hash
                             </th>
