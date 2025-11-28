@@ -95,44 +95,24 @@ const TransactionRow = ({
                 <div
                     className={`grid items-center gap-3 ${isSwap ? "grid-cols-[1fr_min-content_1fr]" : ""}`}
                 >
-                    <div
-                        onClick={() =>
-                            handleAssetClick(
-                                transaction.meta_data?.token_in ||
-                                    transaction.token,
-                            )
-                        }
-                        className="cursor-pointer hover:opacity-80 transition-opacity"
-                    >
-                        <ShortenerComponent
-                            value={
-                                transaction.meta_data?.token_in ||
-                                transaction.token.address
-                            }
-                            startChars={8}
-                            endChars={6}
+                    <button className="p-2  rounded-full hover:bg-dark/30 w-auto">
+                        <AssetComponent
+                            token={transaction.token}
+                            onClick={()=>{}}
                         />
-                    </div>
+                    </button>
 
                     {isSwap && (
                         <>
                             <span className="text-neutral-600 flex items-center justify-center">
                                 <icons.exchange size={20} />
                             </span>
-                            <div
-                                onClick={() =>
-                                    handleAssetClick(
-                                        transaction.meta_data?.token_out,
-                                    )
-                                }
-                                className="cursor-pointer hover:opacity-80 transition-opacity"
-                            >
-                                <ShortenerComponent
-                                    value={transaction.meta_data?.token_out || 'NA' }
-                                    startChars={8}
-                                    endChars={6}
+                                 <button className="p-2  rounded-full hover:bg-dark/30 w-auto">
+                                <AssetComponent
+                                    token={transaction?.meta_data?.token_out_info}
+                                    onClick={()=>{}}
                                 />
-                            </div>
+                            </button>
                         </>
                     )}
                 </div>
